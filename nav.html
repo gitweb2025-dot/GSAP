@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- TAILWIND CSS -->
+    <link rel="stylesheet" href="./dist/output.css" />
+
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
+    <!-- ScrollSmoother requires ScrollTrigger -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollSmoother.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"></script>
+
+    <!-- SplitType -->
+    <script src="https://unpkg.com/split-type"></script>
+
+    <!-- Lenis -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/lenis@1.3.17/dist/lenis.css"
+    />
+    <script src="https://unpkg.com/lenis@1.3.17/dist/lenis.min.js"></script>
+
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+      .card1 {
+        width: 400px;
+        height: 400px;
+        background-color: blue;
+        transition: all 0.4s ease-in-out;
+      }
+
+      .card1:hover {
+        border-radius: 100%;
+      }
+
+      body{
+        cursor: none;
+      }
+
+      /* Cursor container */
+      .cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      /* Outer ring */
+      .cursor-ring {
+        width: 44px;
+        height: 44px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: center center;
+      }
+
+      /* Center dot */
+      .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background: #000;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav
+      id="navbar"
+      class="sticky top-0 m-6 rounded-full bg-green-950/20 z-50 transition-all duration-300"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+          <!-- Left links (desktop) -->
+          <ul class="hidden md:flex gap-8 text-gray-700 font-medium">
+            <a href="" class="hover:text-black cursor-pointer">Home</a>
+            <a href="" class="hover:text-black cursor-pointer">About</a>
+            <a href="" class="hover:text-black cursor-pointer">Services</a>
+          </ul>
+
+          <!-- Logo (center) -->
+          <div class="text-2xl font-bold tracking-wide text-black">Brand</div>
+
+          <!-- Right links (desktop) -->
+          <div class="hidden md:flex items-center gap-8">
+            <span class="hover:text-black cursor-pointer">Blog</span>
+            <span class="hover:text-black cursor-pointer">Contact</span>
+            <button
+              class="px-5 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition"
+            >
+              Login
+            </button>
+          </div>
+
+          <!-- Mobile menu icon -->
+          <button class="md:hidden text-2xl cursor-pointer" id="menu-btn">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="fixed inset-0 bg-white flex flex-col items-center justify-center gap-8 text-xl font-medium opacity-0 w-full pointer-events-none"
+      >
+        <button
+          class="absolute top-5 right-6 text-2xl cursor-pointer"
+          id="close-btn"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <a class="bg-green-950/10 w-full py-4" href="#">Home</a>
+        <a class="bg-green-950/10 w-full py-4" href="#">About</a>
+        <a class="bg-green-950/10 w-full py-4" href="#">Services</a>
+        <a class="bg-green-950/10 w-full py-4" href="#">Blog</a>
+        <a class="bg-green-950/10 w-full py-4" href="#">Contact</a>
+
+        <button class="mt-4 px-8 py-3 bg-black text-white rounded-full">
+          Login
+        </button>
+      </div>
+    </nav>
+
+    <section id="hero" class="min-h-screen bg-emerald-200">
+      <!-- hero content -->
+    </section>
+
+    <div id="nav-end"></div>
+
+    <!-- Cursor -->
+    <div class="cursor">
+      <div class="cursor-ring">
+        <div class="cursor-dot"></div>
+      </div>
+    </div>
+
+    <div id="shape" class="w-72 h-72 bg-green-800 m-6"></div>
+
+    <div id="nav-end"></div>
+
+    <div class="card1"></div>
+
+    <div class="card2"></div>
+
+    <button class="text-brand">Welcome</button>
+
+    <section class="min-h-screen flex items-center justify-center">
+      <div
+        class="relative w-72 h-72 bg-indigo-200 rounded-2xl shadow-lg z-20 group"
+      >
+        <span
+          class="absolute top-0 right-0 bg-indigo-300 rounded-2xl transform transition duration-500 ease-in-out group-hover:rotate-12 group-hover:translate-x-20 w-64 h-64 z-[-1]"
+        >
+          <div
+            class="flex flex-col items-end justify-center gap-6 w-full h-full text-4xl"
+          >
+            <i class="fa-brands fa-instagram"></i>
+            <i class="fa-brands fa-facebook"></i>
+            <i class="fa-brands fa-square-x-twitter"></i>
+          </div>
+        </span>
+        <img
+          class="w-full h-full object-cover rounded-2xl z-20"
+          src="./src/assets/prof.webp"
+          alt="prof"
+        />
+      </div>
+    </section>
+
+    <script>
+      const menuBtn = document.getElementById("menu-btn");
+      const closeBtn = document.getElementById("close-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      const menuTimeline = gsap.timeline({ paused: true });
+
+      menuTimeline
+        .to(mobileMenu, {
+          opacity: 1,
+          pointerEvents: "auto",
+          duration: 0.3,
+          ease: "power2.out",
+        })
+        .from(
+          "#mobile-menu a, #mobile-menu button",
+          {
+            y: 30,
+            opacity: 0,
+            stagger: 0.1,
+            duration: 0.5,
+            ease: "power3.out",
+          },
+          "-=0.1"
+        );
+
+      menuBtn.addEventListener("click", () => {
+        menuTimeline.play();
+      });
+
+      closeBtn.addEventListener("click", () => {
+        menuTimeline.reverse();
+      });
+
+      // shape
+      const shape = document.getElementById("shape");
+
+      shape.addEventListener("mouseenter", () => {
+        gsap.to(shape, {
+          borderRadius: "50%",
+          duration: 0.4,
+          ease: "power3.out",
+        });
+      });
+
+      shape.addEventListener("mouseleave", () => {
+        gsap.to(shape, {
+          borderRadius: "0%",
+          duration: 0.4,
+          ease: "power3.out",
+        });
+      });
+    </script>
+
+    <script>
+      const navbar = document.getElementById("navbar");
+
+      let lastScroll = window.scrollY;
+      let isHidden = false;
+
+      window.addEventListener("scroll", () => {
+        const currentScroll = window.scrollY;
+
+        // Scroll DOWN → hide navbar
+        if (currentScroll > lastScroll && currentScroll > 100 && !isHidden) {
+          isHidden = true;
+
+          gsap.to(navbar, {
+            y: "-120%",
+            duration: 0.4,
+            ease: "power3.out",
+          });
+        }
+
+        // Scroll UP → show navbar
+        if (currentScroll < lastScroll && isHidden) {
+          isHidden = false;
+
+          gsap.to(navbar, {
+            y: "0%",
+            duration: 0.4,
+            ease: "power3.out",
+          });
+        }
+
+        lastScroll = currentScroll;
+      });
+    </script>
+
+    <script>
+      // requestAnimationFrame(raf);
+      // Initialize a new Lenis instance for smooth scrolling
+      const lenis = new Lenis({
+        duration: 1.5, // Smoothness (1–1.5 recommended)
+        // easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Natural ease
+        easing: (t) => 1 - Math.pow(1 - t, 4),
+        smoothWheel: true, // Mouse wheel smoothing
+        smoothTouch: false, // Disable on mobile (better UX)
+      });
+
+      // Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
+      lenis.on("scroll", ScrollTrigger.update);
+
+      // Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
+      // This ensures Lenis's smooth scroll animation updates on each GSAP tick
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000); // Convert time from seconds to milliseconds
+      });
+
+      // Disable lag smoothing in GSAP to prevent any delay in scroll animations
+      gsap.ticker.lagSmoothing(0);
+    </script>
+
+    <script>
+      function clearError(inputId) {
+        const input = document.getElementById(inputId);
+        const error = input.nextElementSibling;
+
+        error.textContent = "";
+        input.style.borderColor = "#ccc";
+      }
+
+      function showError(inputId, message) {
+        const input = document.getElementById(inputId);
+        const error = input.nextElementSibling;
+
+        error.textContent = message;
+        input.style.borderColor = "red";
+      }
+
+      function validateForm() {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        let isValid = true;
+
+        // Name
+        if (name === "") {
+          showError("name", "Name is required");
+          isValid = false;
+        } else {
+          clearError("name");
+        }
+
+        // Email
+        if (!isValidEmail(email)) {
+          showError("email", "Enter a valid email");
+          isValid = false;
+        } else {
+          clearError("email");
+        }
+
+        // Password
+        if (password.length < 6) {
+          showError("password", "Password must be 6+ characters");
+          isValid = false;
+        } else {
+          clearError("password");
+        }
+
+        if (isValid) {
+          alert("Form submitted successfully!");
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM ready");
+      });
+
+      window.addEventListener("keydown", (e) => {
+        console.log(e.key);
+      });
+    </script>
+
+    <script>
+      const cursor = document.querySelector(".cursor");
+      const ring = document.querySelector(".cursor-ring");
+
+      // Center cursor properly with GSAP
+      gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+
+      let mouseX = 0;
+      let mouseY = 0;
+
+      // Track mouse position
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      // Smoothly move the cursor container
+      gsap.ticker.add(() => {
+        gsap.to(cursor, {
+          x: mouseX,
+          y: mouseY,
+          duration: 0.35,
+          ease: "expo.out",
+        });
+      });
+
+      // Hover / click effects for ring
+      document.querySelectorAll("a, button").forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          gsap.to(ring, { scale: 0.7, duration: 0.15, ease: "power2.out" });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(ring, { scale: 1, duration: 0.35, ease: "expo.out" });
+        });
+        el.addEventListener("mousedown", () => {
+          gsap.to(ring, { scale: 0.55, duration: 0.1 });
+        });
+        el.addEventListener("mouseup", () => {
+          gsap.to(ring, { scale: 0.7, duration: 0.15, ease: "power2.out" });
+        });
+      });
+    </script>
+  </body>
+</html>

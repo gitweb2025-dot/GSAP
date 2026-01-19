@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* Tailwind v4 dark mode (CLASS BASED) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-primary: "Bitter", serif;
+  --font-secondary: "Montserrat", sans-serif;
+  --breakpoint-xsm: 380px;
+  --breakpoint-xsmd: 480px;
+  --breakpoint-mdx: 540px;
+  --breakpoint-mdxl: 800px;
+  --breakpoint-xlmd: 840px;
+  --breakpoint-xllg: 1130px;
+  --color-primary: #1363df;
+}

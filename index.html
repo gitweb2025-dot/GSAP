@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./dist/output.css" />
+
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
+    <!-- ScrollSmoother requires ScrollTrigger -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollSmoother.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"></script>
+
+    <!-- SplitType -->
+    <script src="https://unpkg.com/split-type"></script>
+
+    <!-- Lenis -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/lenis@1.3.17/dist/lenis.css"
+    />
+    <script src="https://unpkg.com/lenis@1.3.17/dist/lenis.min.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+      }
+
+      section {
+        height: 100vh;
+        padding: 0 clamp(4rem, 12vw, 20rem);
+        display: grid;
+        place-content: center;
+
+        p {
+          font-size: clamp(2rem, 5vw, 8rem);
+        }
+
+        &:nth-of-type(1) {
+          border-bottom: 1px solid black;
+        }
+
+        &:nth-of-type(3) {
+          background: #ffff00;
+        }
+
+        &:nth-of-type(4) {
+          background: rgb(29, 29, 29);
+          color: white;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <section class="min-h-screen flex items-center justify-center w-full bg-green-300 text-black text-2xl">
+      <a href="./navbar.html">navbar</a>
+      <a href="./nav2.html">nav2</a>
+    </section>
+
+    <section>
+      <h1>Scroll down for awesomeness.</h1>
+    </section>
+
+    <section>
+      <p class="reveal-type" data-bg-color="#cccccc" data-fg-color="teal">
+        Systematically ushering in a new generation of amazing designers from
+        across the globe.
+      </p>
+    </section>
+
+    <section>
+      <p class="reveal-type" data-bg-color="#b6b600" data-fg-color="black">
+        Modern UI designers will expand their skillsets to include frontend.
+      </p>
+    </section>
+
+    <section>
+      <p class="reveal-type" data-bg-color="#353535" data-fg-color="red">
+        The web isn't static anymore, interactivity and motion now dominate.
+      </p>
+    </section>
+
+    <section></section>
+    <section>
+      <h1>Scroll down for awesomeness.</h1>
+    </section>
+
+    <section>
+      <p class="reveal-type" data-bg-color="#cccccc" data-fg-color="teal">
+        Systematically ushering in a new generation of amazing designers from
+        across the globe.
+      </p>
+    </section>
+
+    <section>
+      <p class="reveal-type" data-bg-color="#b6b600" data-fg-color="black">
+        Modern UI designers will expand their skillsets to include frontend.
+      </p>
+    </section>
+
+    <section>
+      <p class="reveal-type" data-bg-color="#353535" data-fg-color="red">
+        The web isn't static anymore, interactivity and motion now dominate.
+      </p>
+    </section>
+
+    <section></section>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.normalizeScroll(true);
+
+      const splitTypes = document.querySelectorAll(".reveal-type");
+
+      splitTypes.forEach((char, i) => {
+        const bg = char.dataset.bgColor;
+        const fg = char.dataset.fgColor;
+
+        const text = new SplitType(char, { types: "chars" });
+
+        // gsap.fromTo(
+        //   text.chars,
+        //   {
+        //     color: bg,
+        //     filter: "blur(30px)",
+        //   },
+        //   {
+        //     color: fg,
+        //     filter: "blur(0px)",
+        //     duration: 0.9,
+        //     stagger: 0.02,
+        //     scrollTrigger: {
+        //       trigger: char,
+        //       start: "top 60%",
+        //       end: "top 20%",
+
+        //       scrub: true,
+        //       markers: false,
+        //       toggleActions: "play play reverse reverse",
+        //     },
+        //   }
+        // );
+        gsap.fromTo(
+          text.chars,
+          {
+            color: bg,
+            y: 60,
+            opacity: 0,
+            // filter: "blur(20px)",
+          },
+          {
+            color: fg,
+            y: 0,
+            opacity: 1,
+            // filter: "blur(0px)",
+            stagger: 0.02,
+            scrollTrigger: {
+              trigger: char,
+              start: "top 60%",
+              end: "top 20%",
+              scrub: true,
+              markers: false,
+            },
+          }
+        );
+      });
+
+      // const lenis = new Lenis();
+
+      // lenis.on("scroll", (e) => {
+      //   console.log(e);
+      // });
+
+      // function raf(time) {
+      //   lenis.raf(time);
+      //   requestAnimationFrame(raf);
+      // }
+
+      // requestAnimationFrame(raf);
+      // Initialize a new Lenis instance for smooth scrolling
+      const lenis = new Lenis({
+        duration: 2, // Smoothness (1–1.5 recommended)
+        // easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Natural ease
+        easing: (t) => 1 - Math.pow(1 - t, 4),
+        smoothWheel: true, // Mouse wheel smoothing
+        smoothTouch: false, // Disable on mobile (better UX)
+      });
+
+      // Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
+      lenis.on("scroll", ScrollTrigger.update);
+
+      // Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
+      // This ensures Lenis's smooth scroll animation updates on each GSAP tick
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000); // Convert time from seconds to milliseconds
+      });
+
+      // Disable lag smoothing in GSAP to prevent any delay in scroll animations
+      gsap.ticker.lagSmoothing(0);
+    </script>
+  </body>
+</html>
