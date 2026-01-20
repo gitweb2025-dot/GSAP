@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auth – GSAP Vertical Slide</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+</head>
+
+<body class="min-h-screen bg-stone-100 grid place-items-center px-4">
+
+  <!-- CARD -->
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+
+    <!-- HEADER -->
+    <div class="p-6 border-b">
+      <h2 id="title" class="text-xl font-semibold">Login</h2>
+      <p id="subtitle" class="text-sm text-stone-500">
+        Access your account
+      </p>
+    </div>
+
+    <!-- FORMS WRAPPER -->
+    <div class="relative h-[320px] overflow-hidden p-6">
+
+      <!-- LOGIN -->
+      <form id="login" class="auth-form absolute inset-0 space-y-4">
+        <input class="w-full border rounded-lg p-3" placeholder="Email" />
+        <input class="w-full border rounded-lg p-3" type="password" placeholder="Password" />
+
+        <button class="w-full bg-emerald-600 text-white py-3 rounded-full">
+          Login
+        </button>
+
+        <div class="text-sm text-center text-emerald-600">
+          <button type="button" onclick="go('register')">Create account</button> ·
+          <button type="button" onclick="go('forgot')">Forgot?</button>
+        </div>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="register" class="auth-form absolute inset-0 space-y-4 hidden">
+        <input class="w-full border rounded-lg p-3" placeholder="Full name" />
+        <input class="w-full border rounded-lg p-3" placeholder="Email" />
+        <input class="w-full border rounded-lg p-3" type="password" placeholder="Password" />
+
+        <button class="w-full bg-emerald-600 text-white py-3 rounded-full">
+          Register
+        </button>
+
+        <div class="text-sm text-center text-emerald-600">
+          <button type="button" onclick="go('login')">Back to login</button>
+        </div>
+      </form>
+
+      <!-- FORGOT -->
+      <form id="forgot" class="auth-form absolute inset-0 space-y-4 hidden">
+        <input class="w-full border rounded-lg p-3" placeholder="Email" />
+
+        <button class="w-full bg-emerald-600 text-white py-3 rounded-full">
+          Send reset link
+        </button>
+
+        <div class="text-sm text-center text-emerald-600">
+          <button type="button" onclick="go('login')">Back to login</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+<script>
+  let current = "login";
+
+  const titles = {
+    login: ["Login", "Access your account"],
+    register: ["Register", "Create a new account"],
+    forgot: ["Reset password", "Recover your access"]
+  };
+
+  function go(target) {
+    if (target === current) return;
+
+    const currentForm = document.getElementById(current);
+    const nextForm = document.getElementById(target);
+
+    // Update header text
+    document.getElementById("title").textContent = titles[target][0];
+    document.getElementById("subtitle").textContent = titles[target][1];
+
+    // Prepare next form
+    gsap.set(nextForm, {
+      y: target === "forgot" ? 60 : -60,
+      opacity: 0,
+      display: "block"
+    });
+
+    // Timeline
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.inOut", duration: 0.35 }
+    });
+
+    tl.to(currentForm, {
+      y: target === "forgot" ? -60 : 60,
+      opacity: 0
+    })
+    .to(nextForm, {
+      y: 0,
+      opacity: 1
+    }, "<");
+
+    tl.add(() => {
+      currentForm.classList.add("hidden");
+      gsap.set(currentForm, { y: 0 });
+      current = target;
+    });
+  }
+</script>
+
+</body>
+</html>
