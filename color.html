@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP</title>
+
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+    <!-- ScrollTrigger -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
+    <!-- ScrollSmoother  -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollSmoother.min.js"></script>
+    <!-- SplitText -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"></script>
+    <!-- RoughEase, ExpoScaleEase and SlowMo are all included in the EasePack file -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/EasePack.min.js"></script>
+
+    <!-- SplitType -->
+    <script src="https://unpkg.com/split-type"></script>
+
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Jquery CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- Lenis -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/lenis@1.3.17/dist/lenis.css"
+    />
+    <script src="https://unpkg.com/lenis@1.3.17/dist/lenis.min.js"></script>
+
+    <!-- TAILWIND CSS -->
+    <link rel="stylesheet" href="./dist/output.css" />
+
+    <!--------------------------------------------------------------------
+                             CSS STARTS HERE 
+    ---------------------------------------------------------------------->
+
+    <!-- CURSOR -->
+    <style>
+      .cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+      }
+
+      .cursor-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: hsl(0, 0%, 100%);
+        opacity: 0.4;
+        transition:
+          width 0.25s ease,
+          height 0.25s ease,
+          opacity 0.25s ease;
+      }
+
+      .cursor.hovered .cursor-dot {
+        width: 76px;
+        height: 76px;
+        opacity: 0.2;
+      }
+    </style>
+  </head>
+
+  <body class="font-primary bg-neutral-100 text-neutral-900">
+    <!-- CURSOR -->
+    <div class="cursor">
+      <div class="cursor-dot"></div>
+    </div>
+
+    <!-- LOADER -->
+    <div
+      id="loader"
+      class="fixed inset-0 z-9999 bg-black flex items-center justify-center"
+    >
+      <h1 id="loaderText" class="text-white text-3xl font-bold">Loading</h1>
+    </div>
+
+    <div id="site" class="opacity-0 transition duration-1000 ease-in-out">
+      <section class="min-h-screen max-w-7xl mx-auto w-full px-6 md:px-10 lg:px-16">
+        <div
+          class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6 flex flex-col justify-center gap-8"
+        >
+          <h1 class="text-4xl font-semibold tracking-tight">Heading</h1>
+          <p class="text-neutral-600">Body text</p>
+          <span class="text-neutral-400 text-sm">Muted text</span>
+          <button
+            class="bg-slate-900 text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition w-fit cursor-pointer "
+          >
+            Get Started
+          </button>
+        </div>
+      </section>
+
+      <!-- SCROLL INDICATOR -->
+      <button
+        id="scrollIndicator"
+        aria-label="Scroll to top"
+        class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black/80 backdrop-blur shadow-[0_0_25px_rgba(0,0,0,0.8)] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 z-50 cursor-pointer"
+      >
+        <svg class="absolute inset-0 -rotate-90" viewBox="0 0 100 100">
+          <!-- Track -->
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="#1f2937"
+            stroke-width="8"
+          />
+          <!-- Progress -->
+          <circle
+            id="progressRing"
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="#10b981"
+            stroke-width="8"
+            stroke-linecap="round"
+            stroke-dasharray="283"
+            stroke-dashoffset="283"
+          />
+        </svg>
+
+        <!-- Percentage -->
+        <!-- <span id="scrollText" class="relative text-xs font-semibold text-white"
+          >0%</span
+        > -->
+        <span class="relative text-xs font-semibold text-white"
+          ><i class="fa-solid fa-angle-up"></i
+        ></span>
+      </button>
+
+      <script>
+        const indicator = document.getElementById("scrollIndicator");
+        const ring = document.getElementById("progressRing");
+        // const scrollText = document.getElementById("scrollText");
+
+        const radius = 45;
+        const circumference = 2 * Math.PI * radius;
+
+        ring.style.strokeDasharray = circumference;
+
+        function updateScroll() {
+          const scrollTop = window.scrollY;
+          const docHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const percent = Math.min(
+            Math.round((scrollTop / docHeight) * 100),
+            100,
+          );
+
+          const offset = circumference - (percent / 100) * circumference;
+          ring.style.strokeDashoffset = offset;
+          // scrollText.textContent = percent + "%";
+
+          if (percent > 2) {
+            indicator.classList.remove("opacity-0", "pointer-events-none");
+          } else {
+            indicator.classList.add("opacity-0", "pointer-events-none");
+          }
+        }
+
+        window.addEventListener("scroll", updateScroll);
+
+        // SCROLL TO TOP
+        indicator.addEventListener("click", () => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        });
+      </script>
+    </div>
+
+    <!---------------------------------------------------------------
+                              JS STARTS HERE
+    ----------------------------------------------------------------->
+
+    <!-- LOADER WITH GSAP ANIMATION -->
+    <script>
+      const loaderTL = gsap.timeline();
+      const site = document.getElementById("site");
+
+      loaderTL
+        .from("#loaderText", {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+          ease: "power3.out",
+        })
+        .to("#loaderText", {
+          letterSpacing: "15px",
+          duration: 0.6,
+          ease: "power2.inOut",
+        })
+        .to("#loader", {
+          yPercent: -100,
+          duration: 1.9,
+          ease: "power4.inOut",
+          delay: 0.4,
+        });
+
+      site.classList.remove("opacity-0");
+    </script>
+
+    <!-- CURSOR JS IWTH JQUERY  -->
+    <script>
+      jQuery(document).ready(function ($) {
+        const cursor = $(".cursor");
+
+        $(document).on("mousemove", function (e) {
+          cursor.css({
+            top: e.clientY,
+            left: e.clientX,
+          });
+        });
+
+        $("a").on("mouseenter", function () {
+          cursor.addClass("hovered");
+        });
+
+        $("a").on("mouseleave", function () {
+          cursor.removeClass("hovered");
+        });
+        $("i").on("mouseenter", function () {
+          cursor.addClass("hovered");
+        });
+
+        $("i").on("mouseleave", function () {
+          cursor.removeClass("hovered");
+        });
+        $("button").on("mouseenter", function () {
+          cursor.addClass("hovered");
+        });
+
+        $("button").on("mouseleave", function () {
+          cursor.removeClass("hovered");
+        });
+      });
+    </script>
+
+    <!-- LENIS JS -->
+    <script>
+      // Initialize a new Lenis instance for smooth scrolling
+      const lenis = new Lenis({
+        duration: 2, // Smoothness (1–1.5 recommended)
+        // easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Natural ease
+        easing: (t) => 1 - Math.pow(1 - t, 4),
+        smoothWheel: true, // Mouse wheel smoothing
+        smoothTouch: false, // Disable on mobile (better UX)
+      });
+
+      // Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
+      lenis.on("scroll", ScrollTrigger.update);
+
+      // Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
+      // This ensures Lenis's smooth scroll animation updates on each GSAP tick
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000); // Convert time from seconds to milliseconds
+      });
+
+      // Disable lag smoothing in GSAP to prevent any delay in scroll animations
+      gsap.ticker.lagSmoothing(0);
+    </script>
+  </body>
+</html>
